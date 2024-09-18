@@ -1,0 +1,1 @@
+db.createCollection('ticket', {validator: {$jsonSchema: {bsonType: 'object',title: 'ticket',required: ['date','price','session_total','player_count','session_used'],properties:{date:{bsonType: 'timestamp'},price:{bsonType: 'decimal'},session_total:{bsonType: 'int'},player_count:{bsonType: 'int'},session_used:{bsonType: 'int'}}}}});
