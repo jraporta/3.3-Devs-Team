@@ -51,7 +51,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `escape_room`.`clue` (
   `element_id` INT NOT NULL,
-  `theme` VARCHAR(45) NOT NULL,
+  `theme` ENUM('horror', 'western', 'scifi') NOT NULL,
   PRIMARY KEY (`element_id`),
   UNIQUE INDEX `element_id_UNIQUE` (`element_id` ASC) VISIBLE,
   CONSTRAINT `fk_element1`
@@ -157,12 +157,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `escape_room`.`ticket` (
   `ticket_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
   `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `price` DECIMAL NOT NULL,
-  `session_total` INT NOT NULL DEFAULT 1,
-  `player_count` INT NOT NULL DEFAULT 1,
-  `session_used` INT NOT NULL DEFAULT 0,
-  `user_id` INT NOT NULL,
+  `cashed` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`ticket_id`, `user_id`),
   INDEX `fk_user3_idx` (`user_id` ASC) VISIBLE,
   UNIQUE INDEX `ticket_id_UNIQUE` (`ticket_id` ASC) VISIBLE,
@@ -179,7 +177,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `escape_room`.`subcription` (
   `user_id` INT NOT NULL,
-  `type` ENUM('clues', 'rooms') NOT NULL,
   PRIMARY KEY (`user_id`),
   CONSTRAINT `fk_user4`
     FOREIGN KEY (`user_id`)
@@ -195,6 +192,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `escape_room`.`room_has_clue` (
   `room_id` INT NOT NULL,
   `clue_id` INT NOT NULL,
+  `quantity` INT NOT NULL,
   PRIMARY KEY (`room_id`, `clue_id`),
   INDEX `fk_clue1_idx` (`clue_id` ASC) VISIBLE,
   INDEX `fk_room1_idx` (`room_id` ASC) VISIBLE,
@@ -217,6 +215,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `escape_room`.`room_has_decor_items` (
   `room_id` INT NOT NULL,
   `decor_item_id` INT NOT NULL,
+  `quantity` INT NOT NULL,
   PRIMARY KEY (`room_id`, `decor_item_id`),
   INDEX `fk_decor_items1_idx` (`decor_item_id` ASC) VISIBLE,
   INDEX `fk_room2_idx` (`room_id` ASC) VISIBLE,
